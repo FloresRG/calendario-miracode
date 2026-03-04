@@ -13,7 +13,7 @@ import {
     BarChart,
     Calendar as CalendarIcon,
     Instagram,
-    MonitorPlay,
+    Facebook,
     Play,
     Share2,
     Users,
@@ -92,7 +92,7 @@ export default function Welcome() {
                             variant="outline"
                             className="rounded-full border-red-200 bg-red-50 px-4 py-1.5 text-xs font-bold tracking-wider text-red-600 uppercase backdrop-blur-sm transition-colors dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-500"
                         >
-                            🔥 Producción Audiovisual Elite
+                            🔥 Producción Audiovisual
                         </Badge>
                     </motion.div>
 
@@ -139,14 +139,6 @@ export default function Welcome() {
                                 size={18}
                                 className="ml-2 transition-transform group-hover:translate-x-1"
                             />
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="lg"
-                            className="h-14 w-full rounded-full border-zinc-200 bg-white/50 px-8 text-base font-bold text-zinc-800 backdrop-blur-md transition-colors hover:bg-zinc-50 sm:w-auto dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
-                        >
-                            <Play size={18} className="mr-2 fill-current" /> Ver
-                            Reel 2025
                         </Button>
                     </motion.div>
                 </section>
@@ -259,8 +251,8 @@ export default function Welcome() {
                                 color="hover:border-pink-500 hover:shadow-pink-500/10 dark:hover:shadow-pink-500/20 hover:text-pink-600 dark:hover:text-pink-500"
                             />
                             <SocialCard
-                                icon={<MonitorPlay size={32} />}
-                                name="Otras Redes"
+                                icon={<Facebook size={32} />}
+                                name="Facebook"
                                 color="hover:border-purple-500 hover:shadow-purple-500/10 dark:hover:shadow-purple-500/20 hover:text-purple-600 dark:hover:text-purple-500"
                             />
                         </div>
