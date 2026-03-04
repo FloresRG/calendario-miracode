@@ -75,6 +75,7 @@ export function EventCreateForm({
     const [allUsers, setAllUsers] = useState<any[]>([]);
     const [userSearch, setUserSearch] = useState('');
     const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
+    const [showDates, setShowDates] = useState(false);
 
     // Set default calendar when calendars change
     useEffect(() => {
@@ -355,30 +356,43 @@ export function EventCreateForm({
                             <div className="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
                                 <Clock className="h-4 w-4" />
                                 <span>Fecha y Hora</span>
-                            </div>
-                            <div className="space-y-2">
-                                <Label className="text-[13px] font-bold">Inicio</Label>
-                                <DateTimePicker
-                                    date={form.fecha_inicio ? new Date(form.fecha_inicio) : undefined}
-                                    setDate={(date) => setForm({
-                                        ...form,
-                                        fecha_inicio: date ? date.toISOString() : ''
-                                    })}
-                                    className="h-11 rounded-xl bg-muted/30 border-none shadow-inner"
-                                />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setShowDates(!showDates)}
+                                    className="ml-auto h-8 px-3 rounded-xl text-sm"
+                                >
+                                    {showDates ? 'Ocultar fechas' : 'Agregar fechas'}
+                                </Button>
                             </div>
 
-                            <div className="space-y-2">
-                                <Label className="text-[13px] font-bold">Fin (Opcional)</Label>
-                                <DateTimePicker
-                                    date={form.fecha_fin ? new Date(form.fecha_fin) : undefined}
-                                    setDate={(date) => setForm({
-                                        ...form,
-                                        fecha_fin: date ? date.toISOString() : ''
-                                    })}
-                                    className="h-11 rounded-xl bg-muted/30 border-none shadow-inner"
-                                />
-                            </div>
+                            {showDates && (
+                                <>
+                                    <div className="space-y-2">
+                                        <Label className="text-[13px] font-bold">Inicio</Label>
+                                        <DateTimePicker
+                                            date={form.fecha_inicio ? new Date(form.fecha_inicio) : undefined}
+                                            setDate={(date) => setForm({
+                                                ...form,
+                                                fecha_inicio: date ? date.toISOString() : ''
+                                            })}
+                                            className="h-11 rounded-xl bg-muted/30 border-none shadow-inner"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-[13px] font-bold">Fin (Opcional)</Label>
+                                        <DateTimePicker
+                                            date={form.fecha_fin ? new Date(form.fecha_fin) : undefined}
+                                            setDate={(date) => setForm({
+                                                ...form,
+                                                fecha_fin: date ? date.toISOString() : ''
+                                            })}
+                                            className="h-11 rounded-xl bg-muted/30 border-none shadow-inner"
+                                        />
+                                    </div>
+                                </>
+                            )}
                         </div>
                         {/* Submit Actions */}
                         <div className="pt-4">
