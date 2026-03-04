@@ -55,12 +55,12 @@ export default function FullCalendarComponent({
     }, [events]);
 
     const getContrastColor = (hexcolor: string) => {
-        if (!hexcolor || hexcolor.startsWith('hsl')) return '#ffffff'; // Fallback for hsl
+        if (!hexcolor || hexcolor.startsWith('hsl')) return '#06a2ebff'; // Fallback for hsl
         const r = parseInt(hexcolor.slice(1, 3), 16);
         const g = parseInt(hexcolor.slice(3, 5), 16);
         const b = parseInt(hexcolor.slice(5, 7), 16);
         const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-        return yiq >= 128 ? '#000000' : '#ffffff';
+        return yiq >= 128 ? '#000000' : '#ffffffff';  
     };
 
     const renderEventContent = (eventInfo: any) => {
