@@ -1,7 +1,3 @@
-import AppLogoIcon from '@/components/app-logo-icon';
-import { HeroGeometric } from '@/components/ui/shadcn-io/shape-landing-hero';
-import { home } from '@/routes';
-import { Link } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
 
 interface AuthLayoutProps {
@@ -16,14 +12,23 @@ export default function AuthSimpleLayout({
     description,
 }: PropsWithChildren<AuthLayoutProps>) {
     return (
-        <HeroGeometric
-            badge=""
-            title1=""
-            title2=""
-            description=""
-            className="relative"
-        >
-            <div className="absolute inset-0 z-10 flex items-center justify-center p-6 md:p-10">
+        <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-black">
+            {/* Video Background */}
+            <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 z-0 h-full w-full object-cover"
+            >
+                <source src="/videos/login.mp4" type="video/mp4" />
+            </video>
+
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 z-10 bg-black/50" />
+
+            {/* Content Container */}
+            <div className="relative z-20 flex w-full items-center justify-center p-6 md:p-10">
                 <div className="w-full max-w-sm">
                     <div className="flex flex-col gap-8 rounded-2xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-xl">
                         <div className="flex flex-col items-center gap-4">
@@ -40,6 +45,6 @@ export default function AuthSimpleLayout({
                     </div>
                 </div>
             </div>
-        </HeroGeometric>
+        </div>
     );
 }
