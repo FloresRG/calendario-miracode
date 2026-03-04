@@ -1,152 +1,167 @@
 // src/components/full-calendar.tsx
-import { useIsMobile } from '@/hooks/use-mobile'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import FullCalendar from '@fullcalendar/react'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import { useEffect, useMemo, useRef } from 'react'
+import { useIsMobile } from '@/hooks/use-mobile';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import FullCalendar from '@fullcalendar/react';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import { useEffect, useMemo, useRef } from 'react';
 
 interface BackendEvent {
-  id: number
-  titulo: string
-  descripcion?: string
-  fecha_inicio: string
-  fecha_fin?: string
-  color?: string
-  emoji?: string
-  template?: string
+    id: number;
+    titulo: string;
+    descripcion?: string;
+    fecha_inicio: string;
+    fecha_fin?: string;
+    color?: string;
+    emoji?: string;
+    template?: string;
 }
 
 interface FullCalendarComponentProps {
-  events?: BackendEvent[]
-  onDateSelect?: (date: string) => void
-  onEventClick?: (eventId: string) => void
-  onEventDrop?: (info: any) => void
+    events?: BackendEvent[];
+    onDateSelect?: (date: string) => void;
+    onEventClick?: (eventId: string) => void;
+    onEventDrop?: (info: any) => void;
 }
 
 export default function FullCalendarComponent({
-  events = [],
-  onDateSelect,
-  onEventClick,
-  onEventDrop,
+    events = [],
+    onDateSelect,
+    onEventClick,
+    onEventDrop,
 }: FullCalendarComponentProps) {
-  const isMobile = useIsMobile()
-  const calendarRef = useRef<any>(null)
+    const isMobile = useIsMobile();
+    const calendarRef = useRef<any>(null);
 
-  const formattedEvents = useMemo(() => {
-    return events.map((event) => {
-      const backgroundColor = event.template || 'hsl(var(--primary))'
-      const stripColor = event.color || event.template || 'hsl(var(--primary))'
+    const formattedEvents = useMemo(() => {
+        return events.map((event) => {
+            const backgroundColor = event.template || 'hsl(var(--primary))';
+            const stripColor =
+                event.color || event.template || 'hsl(var(--primary))';
 
-      return {
-        id: event.id ? event.id.toString() : `temp-${Math.random()}`,
-        title: event.titulo,
-        start: event.fecha_inicio,
-        end: event.fecha_fin,
-        backgroundColor,
-        borderColor: backgroundColor,
-        textColor: '#ffffff',
-        extendedProps: {
-          emoji: event.emoji,
-          stripColor,
-        },
-      }
-    })
-  }, [events])
+            return {
+                id: event.id ? event.id.toString() : `temp-${Math.random()}`,
+                title: event.titulo,
+                start: event.fecha_inicio,
+                end: event.fecha_fin,
+                backgroundColor,
+                borderColor: backgroundColor,
+                extendedProps: {
+                    emoji: event.emoji,
+                    stripColor,
+                },
+            };
+        });
+    }, [events]);
 
-  const renderEventContent = (eventInfo: any) => {
-    const { emoji, stripColor } = eventInfo.event.extendedProps
-    const backgroundColor = eventInfo.event.backgroundColor
-    const isSvg = emoji?.includes('.svg')
+    const getContrastColor = (hexcolor: string) => {
+        if (!hexcolor || hexcolor.startsWith('hsl')) return '#ffffff'; // Fallback for hsl
+        const r = parseInt(hexcolor.slice(1, 3), 16);
+        const g = parseInt(hexcolor.slice(3, 5), 16);
+        const b = parseInt(hexcolor.slice(5, 7), 16);
+        const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+        return yiq >= 128 ? '#000000' : '#ffffff';
+    };
 
-    if (isSvg) {
-      return (
-        <div
-          className="group relative flex h-full w-full items-center overflow-hidden rounded-md border border-white/20 shadow-sm transition-all duration-300 hover:shadow-md"
-        style={{
-          backgroundColor: backgroundColor,
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-        }}
-        >
-          <div className="flex h-full items-center justify-center pl-2 pr-1">
-            <img src={emoji} alt="icon" className="h-8 w-8 object-contain" />
-          </div>
-            <div className="min-w-0 flex-1 truncate px-2.5 text-lg font-bold tracking-tight text-white drop-shadow-md">
-      
-            {eventInfo.event.title}
-          </div>
-        </div>
-      )
-    }
+    const renderEventContent = (eventInfo: any) => {
+        const { emoji, stripColor } = eventInfo.event.extendedProps;
+        const backgroundColor = eventInfo.event.backgroundColor;
+        const isSvg = emoji?.includes('.svg');
+        const textColor = getContrastColor(backgroundColor);
+
+        const textClassName =
+            'min-w-0 flex-1 truncate px-2.5 text-lg font-bold tracking-tight drop-shadow-sm transition-colors';
+
+        if (isSvg) {
+            return (
+                <div
+                    className="group relative flex h-full w-full items-center overflow-hidden rounded-md border border-white/20 shadow-sm transition-all duration-300 hover:shadow-md"
+                    style={{
+                        backgroundColor: backgroundColor,
+                        color: textColor,
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                    }}
+                >
+                    <div className="flex h-full items-center justify-center pr-1 pl-2">
+                        <img
+                            src={emoji}
+                            alt="icon"
+                            className="h-8 w-8 object-contain"
+                        />
+                    </div>
+                    <div className={textClassName}>{eventInfo.event.title}</div>
+                </div>
+            );
+        }
+
+        return (
+            <div
+                className="group relative flex h-full w-full items-center overflow-hidden rounded-md border border-white/20 shadow-sm transition-all duration-300 hover:shadow-md"
+                style={{
+                    backgroundColor: backgroundColor,
+                    color: textColor,
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
+                }}
+            >
+                {emoji && (
+                    <div
+                        className="flex h-8 w-8 items-center justify-center text-sm shadow-inner"
+                        style={{
+                            backgroundColor: stripColor,
+                            borderRight: '2px solid rgba(255, 255, 255, 0.2)',
+                        }}
+                    >
+                        {emoji}
+                    </div>
+                )}
+                <div className={textClassName}>{eventInfo.event.title}</div>
+
+                {/* Shine effect on hover */}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+            </div>
+        );
+    };
+
+    // Mantener tamaño actualizado
+    useEffect(() => {
+        const api = calendarRef.current?.getApi();
+        if (!api) return;
+
+        const resizeObserver = new ResizeObserver(() => {
+            api.updateSize();
+        });
+
+        const container = document.querySelector('.full-calendar-container');
+        if (container) {
+            resizeObserver.observe(container);
+        }
+
+        return () => {
+            if (container) resizeObserver.unobserve(container);
+        };
+    }, []);
+
+    const handleDateClick = (info: any) => {
+        onDateSelect?.(info.dateStr);
+    };
+
+    const handleEventClick = (info: any) => {
+        info.jsEvent.preventDefault();
+        onEventClick?.(info.event.id);
+    };
+
+    const handleEventDrop = (info: any) => {
+        onEventDrop?.(info);
+    };
 
     return (
-      <div
-        className="group relative flex h-full w-full items-center overflow-hidden rounded-md border border-white/20 shadow-sm transition-all duration-300 hover:shadow-md"
-        style={{
-          backgroundColor: backgroundColor,
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-        }}
-      >
-        {emoji && (
-          <div
-            className="flex  w-8 h-8 items-center justify-center text-sm shadow-inner"
-            style={{
-              backgroundColor: stripColor,
-              borderRight: '2px solid rgba(255, 255, 255, 0.2)'
-            }}
-          >
-            {emoji}
-          </div>
-        )}
-        <div className="min-w-0 flex-1 truncate px-2.5 text-lg font-bold tracking-tight text-white drop-shadow-md">
-          {eventInfo.event.title}
-        </div>
-
-        {/* Shine effect on hover */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-      </div>
-    )
-  }
-
-  // Mantener tamaño actualizado
-  useEffect(() => {
-    const api = calendarRef.current?.getApi()
-    if (!api) return
-
-    const resizeObserver = new ResizeObserver(() => {
-      api.updateSize()
-    })
-
-    const container = document.querySelector('.full-calendar-container')
-    if (container) {
-      resizeObserver.observe(container)
-    }
-
-    return () => {
-      if (container) resizeObserver.unobserve(container)
-    }
-  }, [])
-
-  const handleDateClick = (info: any) => {
-    onDateSelect?.(info.dateStr)
-  }
-
-  const handleEventClick = (info: any) => {
-    info.jsEvent.preventDefault()
-    onEventClick?.(info.event.id)
-  }
-
-  const handleEventDrop = (info: any) => {
-    onEventDrop?.(info)
-  }
-
-  return (
-    <div className="full-calendar-container h-full w-full overflow-hidden">
-      {/* Estilos mejorados */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
+        <div className="full-calendar-container h-full w-full overflow-hidden">
+            {/* Estilos mejorados */}
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: `
         .fc {
           --fc-border-color: hsl(var(--border) / 0.4);
           --fc-page-bg-color: transparent;
@@ -160,7 +175,7 @@ export default function FullCalendarComponent({
           padding: 1rem;
           background: hsl(var(--card));
           border-radius: 1rem;
-          border: 1px solid oklch(0.9 0.01 240);
+          border: 1px solid hsl(var(--border));
           box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
         }
 
@@ -202,7 +217,7 @@ export default function FullCalendarComponent({
         }
 
         .fc .fc-col-header-cell-cushion {
-          color: hsl(var(--muted-foreground));
+          color: hsl(var(--foreground));
           font-weight: 700;
           font-size: 0.75rem;
           text-transform: uppercase;
@@ -229,7 +244,7 @@ export default function FullCalendarComponent({
 
         .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
           background-color: hsl(var(--primary));
-          color: white;
+          color: hsl(var(--primary-foreground));
           border-radius: 0.5rem;
           min-width: 2rem;
           height: 2rem;
@@ -266,48 +281,52 @@ export default function FullCalendarComponent({
         .fc .fc-col-header {
           background: hsl(var(--muted)/0.3);
         }
-      `}} />
+      `,
+                }}
+            />
 
-      <FullCalendar
-        ref={calendarRef}
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        headerToolbar={{
-          left: 'prev,next today',
-          center: 'title',
-          right: isMobile ? 'dayGridMonth' : 'dayGridMonth,timeGridWeek,timeGridDay',
-        }}
-        initialView="dayGridMonth"
-        editable={true}
-        selectable={true}
-        selectMirror={true}
-        dayMaxEvents={false}
-        weekends={true}
-        events={formattedEvents}
-        dateClick={handleDateClick}
-        eventClick={handleEventClick}
-        eventDrop={handleEventDrop}
-        eventContent={renderEventContent}
-        height="auto"
-        locale="es"
-        buttonText={{
-          today: 'Hoy',
-          month: 'Mes',
-          week: 'Semana',
-          day: 'Día',
-          prev: 'Anterior',
-          next: 'Siguiente',
-        }}
-        eventDisplay="block"
-        displayEventTime={false}
-        allDayText="Todo el día"
-        moreLinkText={(n) => `+${n} más`}
-        noEventsText="Sin eventos"
-        slotMinTime="06:00:00"
-        slotMaxTime="23:00:00"
-        expandRows={true}
-        dayCellClassNames="hover:bg-primary/10 transition-colors duration-150 cursor-pointer"
-        eventClassNames="cursor-pointer"
-      />
-    </div>
-  )
+            <FullCalendar
+                ref={calendarRef}
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                headerToolbar={{
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: isMobile
+                        ? 'dayGridMonth'
+                        : 'dayGridMonth,timeGridWeek,timeGridDay',
+                }}
+                initialView="dayGridMonth"
+                editable={true}
+                selectable={true}
+                selectMirror={true}
+                dayMaxEvents={false}
+                weekends={true}
+                events={formattedEvents}
+                dateClick={handleDateClick}
+                eventClick={handleEventClick}
+                eventDrop={handleEventDrop}
+                eventContent={renderEventContent}
+                height="auto"
+                locale="es"
+                buttonText={{
+                    today: 'Hoy',
+                    month: 'Mes',
+                    week: 'Semana',
+                    day: 'Día',
+                    prev: 'Anterior',
+                    next: 'Siguiente',
+                }}
+                eventDisplay="block"
+                displayEventTime={false}
+                allDayText="Todo el día"
+                moreLinkText={(n) => `+${n} más`}
+                noEventsText="Sin eventos"
+                slotMinTime="06:00:00"
+                slotMaxTime="23:00:00"
+                expandRows={true}
+                dayCellClassNames="hover:bg-primary/10 transition-colors duration-150 cursor-pointer"
+                eventClassNames="cursor-pointer"
+            />
+        </div>
+    );
 }
