@@ -35,7 +35,7 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const eventColors = [
-    { name: 'Video', value: '#2563eb', emoji: '🎬' },
+    { name: 'Video', value: '#2563eb', emoji: '🎥' },
     { name: 'Arte', value: '#92400e', emoji: '🖼️' },
     { name: 'Historia', value: '#eab308', emoji: '📜' },
     // Social Media Icons
@@ -155,16 +155,7 @@ export function EventCreateForm({
     return (
         <div className="flex flex-col gap-6 p-2 pb-20 overflow-y-auto max-h-[85vh] scrollbar-thin">
             <Card className="border-none bg-transparent shadow-none">
-                <CardHeader className="px-0 pt-0">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-xl bg-primary/10 text-primary">
-                            <PlusCircle className="h-6 w-6" />
-                        </div>
-                        <div>
-                            <CardTitle className="text-2xl font-bold tracking-tight">Nuevo Evento</CardTitle>
-                        </div>
-                    </div>
-                </CardHeader>
+                
 
                 <CardContent className="px-0 space-y-6">
                     <form onSubmit={handleSubmit} className="space-y-8">
@@ -210,7 +201,7 @@ export function EventCreateForm({
                                     id="titulo"
                                     value={form.titulo}
                                     onChange={(e) => setForm({ ...form, titulo: e.target.value })}
-                                    placeholder="Ej: Reunión de Equipo Admus"
+                                    placeholder="Agregar titulo del evento..."
                                     className="min-h-[44px] h-auto rounded-xl bg-muted/30 border-none shadow-inner focus:ring-2 focus:ring-primary/20 font-medium text-lg py-2 break-all"
                                     required
                                 />

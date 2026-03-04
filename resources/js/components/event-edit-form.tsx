@@ -33,7 +33,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 
 const eventColors = [
-    { name: 'Video', value: '#2563eb', emoji: '🎬' },
+    { name: 'Video', value: '#2563eb', emoji: '🎥' },
     { name: 'Arte', value: '#92400e', emoji: '🖼️' },
     { name: 'Historia', value: '#eab308', emoji: '📜' },
     // Social Media Icons
@@ -60,7 +60,7 @@ export function EventEditForm({
     onModeChange,
 }: EventEditFormProps) {
     const baseEventColors = [
-        { name: 'Video', value: '#2563eb', emoji: '🎬' },
+        { name: 'Video', value: '#2563eb', emoji: '🎥' },
         { name: 'Arte', value: '#92400e', emoji: '🖼️' },
         { name: 'Historia', value: '#eab308', emoji: '📜' },
         // Social Media Icons
