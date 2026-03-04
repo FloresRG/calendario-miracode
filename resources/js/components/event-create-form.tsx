@@ -35,16 +35,9 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const eventColors = [
-    { name: 'Azul', value: '#2563eb', emoji: '📱' },
-    { name: 'Rojo', value: '#dc2626', emoji: '🔥' },
-    { name: 'Amarillo', value: '#eab308', emoji: '💡' },
-    { name: 'Verde', value: '#16a34a', emoji: '📈' },
-    { name: 'Celeste', value: '#06b6d4', emoji: '🌐' },
-    { name: 'Violeta', value: '#9333ea', emoji: '🎯' },
-    { name: 'Rosado', value: '#ec4899', emoji: '❤️' },
-    { name: 'Naranja', value: '#ea580c', emoji: '🚀' },
-    { name: 'Café', value: '#8b4513', emoji: '☕' },
-    { name: 'Marrón', value: '#92400e', emoji: '🏆' },
+    { name: 'Video', value: '#2563eb', emoji: '🎬' },
+    { name: 'Arte', value: '#92400e', emoji: '🖼️' },
+    { name: 'Historia', value: '#eab308', emoji: '📜' },
     // Social Media Icons
     { name: 'Facebook', value: '#1877F2', emoji: '/icon/icons8-facebook.svg' },
     { name: 'Instagram', value: '#E1306C', emoji: '/icon/icons8-instagram.svg' },
